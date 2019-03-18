@@ -1,39 +1,21 @@
 package com.alex.dao;
 
+import com.alex.model.IDBConnection;
+import com.alex.model.PostgreSQLConnection;
 import com.alex.model.entity.User;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class PostgreSqlDao extends Dao {
-    Connection conn = null;
-    Statement stmt = null;
-    ResultSet rs = null;
+public class UserDao implements IUserDao {
+    private IDBConnection c = PostgreSQLConnection.getInstance();
+    private Connection conn = c.connect();
+    private Statement stmt = null;
+    private ResultSet rs = null;
 
-    public PostgreSqlDao()  {
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/english_coup", "postgres", "123");
-            System.out.println("Connected to PostgreSQL database!");
-
-        } catch (SQLException e) {
-            System.out.println("Connection failure.");
-            e.printStackTrace();
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
-            System.out.println("PostgreSQL JDBC driver not found.");
-            e.printStackTrace();
-        }
-    }
-
-    public User getUserByEmail(String email) {
+    public User getByEmail(String email) {
         User user = null;
         try {
             stmt = conn.createStatement();
@@ -52,7 +34,7 @@ public class PostgreSqlDao extends Dao {
         return user;
     }
 
-    public void addUser(User user) {
+    public void add(User user) {
         try {
             stmt = conn.createStatement();
             String query = String.format("INSERT INTO users (email, password) VALUES ('%s', '%s')", user.getEmail(), user.getPassword());

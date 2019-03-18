@@ -1,6 +1,5 @@
 package com.alex.model;
 
-import org.json.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,8 +16,7 @@ public class JsonObject {
             sb.append(str);
         }
         try {
-            JSONObject jObj = new JSONObject(sb.toString());
-            return jObj;
+            return new JSONObject(sb.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

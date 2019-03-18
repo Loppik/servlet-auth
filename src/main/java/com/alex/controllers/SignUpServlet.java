@@ -2,8 +2,6 @@ package com.alex.controllers;
 
 import com.alex.model.AuthService;
 import com.alex.model.JsonObject;
-import com.alex.model.entity.User;
-import com.sun.javafx.collections.MappingChange;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 
 @WebServlet("/signup")
 public class SignUpServlet extends HttpServlet {
@@ -24,7 +21,7 @@ public class SignUpServlet extends HttpServlet {
         String email = reqJson.getString("email");
         String password = reqJson.getString("password");
 
-        String result = AuthService.singUp(email, password);
+        String result = new AuthService().singUp(email, password);
         resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
         JSONObject respJson = new JSONObject();

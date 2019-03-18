@@ -1,15 +1,16 @@
 package com.alex.model;
 
-import com.alex.dao.DataStorageModel;
 import com.alex.model.entity.User;
 
 public class AuthService {
-    public static String signIn(String email, String password) {
-        User user = DataStorageModel.getDao().getUserByEmail(email);
+    private UserService userService = new UserService();
+
+    public String signIn(String email, String password) {
+        User user = userService.getUserByEmail(email);
         if (user != null) {
             boolean isEqual = HashService.compare(password, user.getPassword());
             if (isEqual) {
-                return "User checked";
+                return JWTProvider.createJWT("1", "issue", email, 10000);
             } else {
                 return "Incorrect password";
             }
@@ -17,13 +18,13 @@ public class AuthService {
         return "No such email";
     }
 
-    public static String singUp(String email, String password) {
-        User u = DataStorageModel.getDao().getUserByEmail(email);
+    public String singUp(String email, String password) {
+        User u = userService.getUserByEmail(email);
         if (u != null) {
             return "This e-mail already exist";
         } else {
             User user = new User(email, HashService.getHash(password));
-            DataStorageModel.getDao().addUser(user);
+            userService.addUser(user);
             return "User added";
         }
     }
