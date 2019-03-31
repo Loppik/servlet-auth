@@ -10,7 +10,7 @@ public class AuthService {
         if (user != null) {
             boolean isEqual = HashService.compare(password, user.getPassword());
             if (isEqual) {
-                return JWTProvider.createJWT("1", "issue", email, 10000);
+                return JWTProvider.createJWT(email);
             } else {
                 return "Incorrect password";
             }
